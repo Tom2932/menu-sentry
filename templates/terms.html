@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Terms | {{ site.name }}{% endblock %}
+{% block body %}
+<main class="section"><div class="wrap narrow prose">
+  <h1>Terms of service</h1>
+  <p>Last updated {{ site.updated }}.</p>
+  <h2>1. Who we are</h2>
+  <p>{{ site.name }} is run by {{ site.legal_name or site.name }}{% if site.address %}, {{ site.address }}{% endif %}.{% if site.contact %} Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
+  <h2>2. The service</h2>
+  <p>We send you a weekly email listing changes we find to the prices and dishes on the public online menus of the competitors you choose. We cannot promise that every change is found. The service depends on what competitors publish and on our ability to read their pages. We will tell you if a competitor's menu cannot be read.</p>
+  <h2>3. Business customers only</h2>
+  <p>{{ site.name }} is for businesses. By signing up you confirm that you are buying for the purposes of your business and that you have authority to agree these terms for it.</p>
+  <h2>4. Price and billing</h2>
+  <p>The price is {{ site.price }}{% if site.price_note %} ({{ site.price_note }}){% endif %}. It is charged monthly in advance by card through Stripe and renews automatically until you cancel. If a payment fails, we may pause your reports until it is paid. We will give you at least 30 days' notice by email before any price increase, and you can cancel before it takes effect.</p>
+  <h2>5. Cancelling</h2>
+  <p>You can cancel at any time by replying to a report email{% if site.contact %} or writing to <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We will confirm your cancellation by email. You keep the service until the end of the month you have paid for, and you will not be charged again. If you cancel after a monthly payment has been taken, that payment is not refunded.</p>
+  <h2>6. Refunds</h2>
+  <p>If we do not send your reports for a billing month for reasons within our control, we will refund that month's payment. Otherwise payments are not refunded, except where the law requires it.</p>
+  <h2>7. Your responsibilities</h2>
+  <p>Give us accurate details of the competitors you want watched. Use the reports for your own business and do not resell them.</p>
+  <h2>8. Our responsibility</h2>
+  <p>Reports are information, not advice. Pricing and menu decisions are yours. Nothing in these terms limits any liability that cannot be limited by law.</p>
+  <h2>9. Changes</h2>
+  <p>We may change the service or these terms. We will tell you by email before a change that affects you takes effect.</p>
+  <h2>10. Law</h2>
+  <p>These terms are governed by the law of England and Wales.</p>
+</div></main>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% from 'macros.html' import signup %}<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.name }}: know when your competitors change their menus{% endblock %}</title>
+  <meta name="description" content="{% block desc %}A weekly email telling restaurants and cafes when local competitors change menu prices, add dishes or drop them.{% endblock %}">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://js.stripe.com/clover/stripe.js"></script>
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap bar">
+    <a href="/" class="brand"><img src="/logo.svg" alt="{{ site.name }}" height="38"></a>
+    <nav class="links" aria-label="Main">
+      <a href="/#how">How it works</a><a href="/#example">Example</a><a href="/#pricing">Pricing</a>
+      <a href="/#reviews">Reviews</a><a href="/#faq">FAQ</a>
+    </nav>
+    {{ signup('Sign up', 'btn small') }}
+  </div>
+</header>
+{% block body %}{% endblock %}
+<footer class="footer">
+  <div class="wrap foot">
+    <div>
+      <img src="/logo.svg" alt="{{ site.name }}" height="30">
+      <p class="fine">&copy; {{ site.year }} {{ site.legal_name or site.name }}{% if site.address %}<br>{{ site.address }}{% endif %}</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/reviews-policy">Reviews policy</a>
+      {% if site.contact %}<a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

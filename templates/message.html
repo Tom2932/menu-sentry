@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | {{ site.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body %}
+<main class="section"><div class="wrap narrow"><div class="card">
+  <h1>{{ title }}</h1><p>{{ text }}</p>
+  <p><a class="btn ghost" href="/">Back to the home page</a></p>
+</div></div></main>
+{% endblock %}

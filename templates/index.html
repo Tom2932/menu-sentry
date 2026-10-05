@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import signup, stars %}
+{% block body %}
+<main>
+<section class="hero">
+  <div class="wrap">
+    <h1>Know when your competitors change their menus</h1>
+    <p class="lead">{{ site.name }} checks your local competitors' online menus every week and emails you what changed: price rises, new dishes and dishes that have gone.</p>
+    <div class="cta">
+      {{ signup('Sign up for ' ~ site.price) }}
+      <a class="btn ghost" href="#example">See an example report</a>
+    </div>
+    <p class="fine">For businesses. Cancel any time and keep the service until the end of the month you have paid for. Payment is handled securely by Stripe.</p>
+  </div>
+</section>
+
+<section id="how" class="section">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="grid3">
+      <div class="card"><span class="num">1</span><h3>Tell us who to watch</h3>
+        <p>Choose the competitors you want to follow and send us the web address of each one's menu.</p></div>
+      <div class="card"><span class="num">2</span><h3>We check every week</h3>
+        <p>We read each menu page and compare it with the last time we looked.</p></div>
+      <div class="card"><span class="num">3</span><h3>You get one email</h3>
+        <p>A clear list of what changed, with the old and new price for every dish that moved.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <h2>What is in the report</h2>
+    <div class="grid4">
+      <div class="card"><h3>Price changes</h3><p>Old price, new price and the percentage change.</p></div>
+      <div class="card"><h3>New dishes</h3><p>Anything a competitor has added to the menu.</p></div>
+      <div class="card"><h3>Removed dishes</h3><p>Anything that has dropped off, with its last price.</p></div>
+      <div class="card"><h3>Renamed dishes</h3><p>Same dish and price under a new name, so it is not mistaken for a new one.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="example" class="section">
+  <div class="wrap narrow">
+    <h2>An example report</h2>
+    <p class="muted">This is what lands in your inbox each week. The restaurants and prices below are made up.</p>
+    <div class="email" aria-label="Example report email">
+      <div class="email-head"><b>Subject:</b> Trattoria Verdi: competitor report, 12 changes (03 Oct 2026)</div>
+      <div class="email-body">
+        <p>Hi Daniel,</p>
+        <p>Here is this week's competitor report for Trattoria Verdi, week ending 03 Oct 2026.</p>
+        <h4>At a glance</h4>
+        <ul>
+          <li>Osteria Bianca: 4 price changes, 1 new item, 1 removed item. Average change on repriced items: +4.8%</li>
+          <li>Luna Rossa Kitchen: 2 price changes, 1 new item, 1 removed item, 1 renamed. Average change on repriced items: +5.6%</li>
+          <li>Casa Fiorella: 1 price change. Average change on repriced items: +6.2%</li>
+        </ul>
+        <h4>Osteria Bianca</h4>
+        <table>
+          <tr><td>Tiramisu</td><td>&pound;8.50 &rarr; &pound;9.00</td><td>+5.9%</td></tr>
+          <tr><td>Tagliatelle al ragu</td><td>&pound;16.50 &rarr; &pound;17.50</td><td>+6.1%</td></tr>
+          <tr><td>Margherita pizza</td><td>&pound;12.50 &rarr; &pound;13.00</td><td>+4.0%</td></tr>
+          <tr><td>Diavola pizza</td><td>&pound;14.50 &rarr; &pound;15.00</td><td>+3.4%</td></tr>
+          <tr><td>Pumpkin ravioli</td><td colspan="2"><span class="tag new">New</span> &pound;16.50</td></tr>
+          <tr><td>Sea bass</td><td colspan="2"><span class="tag gone">Removed</span> was &pound;24.00</td></tr>
+        </table>
+        <h4>Luna Rossa Kitchen</h4>
+        <table>
+          <tr><td>Carbonara</td><td>&pound;15.50 &rarr; &pound;16.50</td><td>+6.5%</td></tr>
+          <tr><td>Burrata</td><td>&pound;10.50 &rarr; &pound;11.00</td><td>+4.8%</td></tr>
+          <tr><td>Weekday lunch, two courses</td><td colspan="2"><span class="tag new">New</span> &pound;18.00</td></tr>
+          <tr><td>Chicken milanese</td><td colspan="2"><span class="tag gone">Removed</span> was &pound;19.00</td></tr>
+          <tr><td>Meatballs &rarr; Beef meatballs</td><td colspan="2"><span class="tag ren">Renamed</span> &pound;9.50</td></tr>
+        </table>
+        <h4>Casa Fiorella</h4>
+        <table>
+          <tr><td>Risotto funghi</td><td>&pound;16.00 &rarr; &pound;17.00</td><td>+6.2%</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="section alt">
+  <div class="wrap narrow center">
+    <h2>One simple price</h2>
+    <div class="card price">
+      <p class="amount">{{ site.price }}</p>
+      {% if site.price_note %}<p class="fine">{{ site.price_note }}</p>{% endif %}
+      <ul class="ticks">
+        <li>A weekly email report</li>
+        <li>The competitors you choose</li>
+        <li>Price changes, new, removed and renamed dishes</li>
+        <li>Cancel any time</li>
+      </ul>
+      {{ signup('Sign up now') }}
+      <p class="fine">For businesses only. Billed monthly by card through Stripe and renewing until you cancel. We never see your card details. By signing up you agree to the <a href="/terms">terms</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="reviews" class="section">
+  <div class="wrap">
+    <h2>What customers say</h2>
+    {% if summary.count %}
+      <p class="avg">{{ stars(summary.rounded) }} <b>{{ summary.average }}</b> out of 5 from {{ summary.count }} review{{ '' if summary.count == 1 else 's' }}</p>
+      <div class="grid3">
+        {% for r in reviews %}
+        <figure class="card review">
+          <div>{{ stars(r.rating) }}</div>
+          <blockquote>{{ r.body }}</blockquote>
+          <figcaption>{{ r.reviewer }}, {{ r.business }} <span class="tag cust">Customer</span></figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">No reviews yet. Reviews appear here once customers have used {{ site.name }} and chosen to share their experience.</p>
+    {% endif %}
+    <p class="fine">Reviews come only from customers, through a one-time link we send them. We publish every genuine review, good or bad. <a href="/reviews-policy">Read our reviews policy</a>.</p>
+  </div>
+</section>
+
+<section id="faq" class="section alt">
+  <div class="wrap narrow">
+    <h2>Questions</h2>
+    <details><summary>Which menus can you read?</summary>
+      <p>Public web pages and PDF menus where the prices are written as text. We do not cover delivery apps. We only read what a competitor publishes on their own website, and we follow each site's robots.txt rules.</p></details>
+    <details><summary>How do I choose my competitors?</summary>
+      <p>After you sign up, email us the names of the restaurants you want to follow and a link to each one's menu.</p></details>
+    <details><summary>What if a competitor's menu cannot be read?</summary>
+      <p>Most online menus work. Some sites show their menu as a photo or in a way a program cannot read. We check every competitor when we set you up and tell you if one cannot be used.</p></details>
+    <details><summary>How often is the report sent?</summary>
+      <p>Once a week, by email.</p></details>
+    <details><summary>Is {{ site.name }} for businesses only?</summary>
+      <p>Yes. It is for restaurants, cafes and other businesses. By signing up you confirm you are buying for the purposes of your business.</p></details>
+    <details><summary>How do I cancel?</summary>
+      <p>Reply to any report email{% if site.contact %} or write to <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We will confirm by email. You keep the service until the end of the month you have paid for, and a payment already taken is not refunded. See the <a href="/terms">terms</a>.</p></details>
+    <details><summary>What if a payment fails?</summary>
+      <p>We may pause your reports until the payment is made. If we fail to send your reports for a month for reasons within our control, we refund that month's payment.</p></details>
+    <details><summary>How is payment handled?</summary>
+      <p>By Stripe, a payment company used by millions of businesses. We never see or store your card number.</p></details>
+  </div>
+</section>
+
+<section class="section final">
+  <div class="wrap center">
+    <h2>See what your competitors changed this week</h2>
+    {{ signup('Sign up for ' ~ site.price) }}
+  </div>
+</section>
+</main>
+{% endblock %}

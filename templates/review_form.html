@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Leave a review | {{ site.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body %}
+<main class="section"><div class="wrap narrow"><div class="card">
+  <h1>Leave a review</h1>
+  <p class="muted">Reviewing as <b>{{ business }}</b>. Say what it was really like. We publish every genuine review, good or bad, and never edit the wording. See our <a href="/reviews-policy">reviews policy</a>.</p>
+  {% if errors %}<div class="alert"><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+  <form method="post" action="/review" class="form">
+    <input type="hidden" name="token" value="{{ token }}">
+    <label>Your name and role<input type="text" name="reviewer" maxlength="80" required placeholder="e.g. Marco, owner" value="{{ values.get('reviewer', '') }}"></label>
+    <fieldset class="rate"><legend>Rating (5 is best)</legend>
+      {% for n in range(5, 0, -1) %}<label class="radio"><input type="radio" name="rating" value="{{ n }}" required {{ 'checked' if values.get('rating') == n|string }}> {{ n }}</label>{% endfor %}
+    </fieldset>
+    <label>Your review (20 to 1000 characters)<textarea name="body" rows="6" minlength="20" maxlength="1000" required>{{ values.get('body', '') }}</textarea></label>
+    <label class="check"><input type="checkbox" name="consent" required> I agree that {{ site.name }} may publish this review with my name, role and business name.</label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <button type="submit" class="btn">Submit review</button>
+  </form>
+</div></div></main>
+{% endblock %}

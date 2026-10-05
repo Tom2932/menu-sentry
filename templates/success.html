@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Thanks for your order! | {{ site.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body %}
+<main class="section"><div class="wrap narrow"><div class="card">
+  <h1>Thanks for your order!</h1>
+  <p>We appreciate your business!{% if site.contact %} If you have any questions, please email <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
+  <p>Next step: {% if site.contact %}email us the names and menu links of the competitors you want watched.{% else %}we will be in touch to set up the competitors you want watched.{% endif %}</p>
+</div></div></main>
+{% endblock %}

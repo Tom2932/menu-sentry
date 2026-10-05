@@ -1,0 +1,2 @@
+{% macro signup(label, cls='btn') %}<form class="inline" action="/create-checkout-session" method="post"><button type="submit" class="{{ cls }}">{{ label }}</button></form>{% endmacro %}
+{% macro stars(n) %}<span class="stars" role="img" aria-label="{{ n }} out of 5">{{ '★' * n }}{{ '☆' * (5 - n) }}</span>{% endmacro %}

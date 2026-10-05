@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Reviews admin | {{ site.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body %}
+{% macro reject_form(r) %}
+<form method="post" action="/admin/review/{{ r.id }}/reject" class="row">
+  <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  <select name="reason" required>{% for key, label in reasons.items() %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select>
+  <input type="text" name="note" maxlength="300" placeholder="Note (needed for Other)">
+  <button class="btn small ghost" type="submit">{{ 'Remove' if r.status == 'approved' else 'Reject' }}</button>
+</form>
+{% endmacro %}
+<main class="section"><div class="wrap admin">
+  <h1>Reviews admin</h1>
+  <div class="alert info">
+    Publish every genuine review, positive or negative. Do not edit review text. Only reject spam, abuse or reviews that are not based on real use, and always give the reason. Invite all your customers, not a chosen few. If you ever offer a reward for a review, tell the reviewer and label it on the site.
+  </div>
+
+  <h2>Invite a customer to review</h2>
+  <form method="post" action="/admin/invite" class="row">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <input type="text" name="business" maxlength="100" placeholder="Customer business name" required>
+    <button class="btn small" type="submit">Create link</button>
+  </form>
+  {% if invites %}
+  <table>
+    <tr><th>Business</th><th>Status</th><th>Link to send them</th><th></th></tr>
+    {% for i in invites %}<tr>
+      <td>{{ i.business }}</td>
+      <td>{{ 'Used ' ~ i.used_at[:10] if i.used_at else 'Waiting' }}</td>
+      <td>{% if not i.used_at %}<input type="text" readonly value="{{ base_url }}/review?token={{ i.token }}" onclick="this.select()">{% endif %}</td>
+      <td>{% if not i.used_at %}<form method="post" action="/admin/invite/{{ i.token }}/delete"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn small ghost" type="submit">Delete</button></form>{% endif %}</td>
+    </tr>{% endfor %}
+  </table>
+  {% endif %}
+
+  <h2>Waiting for a decision ({{ pending|length }})</h2>
+  {% for r in pending %}
+  <div class="card rev">
+    <p><b>{{ r.rating }}/5</b> from {{ r.reviewer }}, {{ r.business }} <span class="muted">{{ r.created_at[:10] }}</span></p>
+    <blockquote>{{ r.body }}</blockquote>
+    <div class="row">
+      <form method="post" action="/admin/review/{{ r.id }}/approve"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn small" type="submit">Publish</button></form>
+      {{ reject_form(r) }}
+    </div>
+  </div>
+  {% else %}<p class="muted">Nothing waiting.</p>{% endfor %}
+
+  <h2>Published ({{ summary.count }}{% if summary.count %}, average {{ summary.average }}{% endif %})</h2>
+  {% for r in approved %}
+  <div class="card rev">
+    <p><b>{{ r.rating }}/5</b> from {{ r.reviewer }}, {{ r.business }} <span class="muted">{{ r.created_at[:10] }}</span></p>
+    <blockquote>{{ r.body }}</blockquote>
+    {{ reject_form(r) }}
+  </div>
+  {% else %}<p class="muted">Nothing published yet.</p>{% endfor %}
+
+  <h2>Removed (latest 30)</h2>
+  {% for r in rejected %}
+  <div class="card rev">
+    <p><b>{{ r.rating }}/5</b> from {{ r.reviewer }}, {{ r.business }}. <b>Reason:</b> {{ r.reject_reason }}</p>
+    <blockquote>{{ r.body }}</blockquote>
+  </div>
+  {% else %}<p class="muted">Nothing removed.</p>{% endfor %}
+</div></main>
+{% endblock %}
