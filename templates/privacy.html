@@ -4,33 +4,51 @@
 <main class="section"><div class="wrap narrow prose">
   <h1>Privacy notice</h1>
   <p>Last updated {{ site.updated }}.</p>
+
   <h2>Who is responsible</h2>
-  <p>{{ site.legal_name or site.name }}{% if site.address %}, {{ site.address }}{% endif %}{% if site.contact %}. Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}.</p>
+  <p>{{ site.legal_name or site.name }}{% if site.address %}, {{ site.address }}{% endif %}{% if site.contact %}. Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We decide how your personal data is used, so we are the "controller" under UK data protection law.</p>
   {% if site.ico %}<p>We are registered with the Information Commissioner's Office. Registration number: {{ site.ico }}.</p>{% endif %}
+
   <h2>What we hold</h2>
   <ul>
     <li>Your name, email address and business name.</li>
     <li>The competitors and menu links you ask us to watch.</li>
     <li>Payment details are handled by Stripe. We receive confirmation that you have paid, your name and email, and your subscription status. We do not see or store your card number.</li>
     <li>Any review you choose to submit, with the name, role and business name you give.</li>
-    <li>Basic server records, such as the time of a visit, kept for security.</li>
+    <li>Messages you send us.</li>
+    <li>Basic server records, such as the time of a visit and your IP address, kept for security.</li>
   </ul>
+  <p>The competitor menus we read are public business information. We do not collect personal data about competitors' customers.</p>
+
   <h2>Why we use it, and our legal basis</h2>
   <ul>
     <li>To provide and bill for the service: it is needed to carry out our contract with you.</li>
     <li>To keep accounts and tax records: we are required by law to keep them.</li>
     <li>To answer you and keep the site secure: this is in our legitimate interests as a business.</li>
-    <li>To publish a review you submit: you agree when you submit it, and you can withdraw that agreement by emailing us.</li>
+    <li>To publish a review you submit: you agree when you submit it, and you can withdraw that agreement by emailing us. We will then remove your name and business name from the review, or remove the review if you ask us to.</li>
   </ul>
   <p>We do not sell your data and we do not use it for advertising.</p>
+
   <h2>Who else sees it</h2>
   <p>Companies that help us run the service, such as Stripe for payments and our email and hosting providers. They may only use it for that purpose.</p>
   <p>Some of these companies may store or process data outside the UK. When they do, the transfer must be covered by safeguards that UK data protection law requires.</p>
+
   <h2>How long we keep it</h2>
-  <p>While you are a customer, and afterwards for as long as the law requires us to keep accounting records.</p>
+  <p>While you are a customer, and afterwards for as long as the law requires us to keep accounting records. Messages and server records are kept only for as long as we need them.</p>
+
+  <h2>How we protect it</h2>
+  <p>We use reasonable technical and organisational measures to protect your data. Card details stay with Stripe and never reach our servers, our admin areas are password protected, and we limit who can access the data. No system is completely secure.</p>
+
+  <h2>If something goes wrong with your data</h2>
+  <p>If a security incident affects your personal data in a way that is likely to harm you, we will tell you without undue delay. Where the law requires it, we will also report it to the Information Commissioner's Office.</p>
+
   <h2>Your rights</h2>
-  <p>You can ask to see, correct or delete the data we hold about you, and you can complain to the Information Commissioner's Office (ico.org.uk).</p>
+  <p>You can ask to see, correct or delete the data we hold about you. You can also ask us to restrict how we use it, object to how we use it, and ask for a copy in a form you can move to another provider. Email us to do any of these. You can complain to the Information Commissioner's Office (ico.org.uk).</p>
+
   <h2>Cookies</h2>
   <p>We use no advertising or analytics cookies. Stripe's script, loaded on this site to help prevent fraud, may set cookies for that purpose. The admin area uses a login cookie.</p>
+
+  <h2>Changes to this notice</h2>
+  <p>We may update this notice. The date at the top shows when it last changed.</p>
 </div></main>
 {% endblock %}

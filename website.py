@@ -69,7 +69,7 @@ def _pick_db_path():
 
 REVIEWS_DB = _pick_db_path()
 PORT = int(os.environ.get("PORT", 5056))
-LEGAL_UPDATED = "4 October 2026"
+LEGAL_UPDATED = "6 October 2026"
 PUBLIC_FILES = {"style.css", "logo.svg", "logo.png", "logo-transparent.png", "icon.svg", "icon.png"}
 REQUIRED_FILES = [
     "templates/base.html", "templates/macros.html", "templates/index.html", "templates/message.html",
@@ -81,6 +81,7 @@ REJECT_REASONS = {
     "spam": "Spam",
     "abusive": "Abusive or offensive",
     "not_real_use": "Not based on real use of the service",
+    "withdrawn": "Reviewer withdrew their agreement to publication",
     "other": "Other (explain in the note)",
 }
 

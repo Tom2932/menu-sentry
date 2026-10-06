@@ -92,7 +92,7 @@ def ping(key):
 
 # sample_only values. Replace them on the dashboard Settings page.
 # Every one is listed in STRIPE_INTEGRATION_TODO.md.
-PLACEHOLDER_PRICE = "price_1UNJYcLvjUG6IUSMBTYHQzKM"
+PLACEHOLDER_PRICE = "price_..."
 PLACEHOLDER_SUCCESS_URL = "https://example.com/success?session_id={CHECKOUT_SESSION_ID}"
 PLACEHOLDER_CANCEL_URL = "https://example.com/cancel"
 CHECKOUT_MODE = "subscription"   # monthly fee. Use "payment" for a one-off charge.

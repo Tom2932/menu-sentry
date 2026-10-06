@@ -4,25 +4,64 @@
 <main class="section"><div class="wrap narrow prose">
   <h1>Terms of service</h1>
   <p>Last updated {{ site.updated }}.</p>
+
   <h2>1. Who we are</h2>
   <p>{{ site.name }} is run by {{ site.legal_name or site.name }}{% if site.address %}, {{ site.address }}{% endif %}.{% if site.contact %} Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
-  <h2>2. The service</h2>
-  <p>We send you a weekly email listing changes we find to the prices and dishes on the public online menus of the competitors you choose. We cannot promise that every change is found. The service depends on what competitors publish and on our ability to read their pages. We will tell you if a competitor's menu cannot be read.</p>
-  <h2>3. Business customers only</h2>
+
+  <h2>2. Business customers only</h2>
   <p>{{ site.name }} is for businesses. By signing up you confirm that you are buying for the purposes of your business and that you have authority to agree these terms for it.</p>
-  <h2>4. Price and billing</h2>
+
+  <h2>3. The service</h2>
+  <p>We aim to send you a weekly email listing changes we find to the prices and dishes on the public online menus of the competitors you choose. We provide the service with reasonable care and skill. We read the web pages and PDF menus that competitors publish, and we follow each site's robots.txt rules. We will tell you if a competitor's menu cannot be read.</p>
+
+  <h2>4. What we do not promise</h2>
+  <p>We do not promise that every change will be found, that a report will arrive on a particular day or at a particular time, that the service will be uninterrupted or free of errors, or that the information on a competitor's menu is itself correct.</p>
+  <p>The service depends on things we do not control. These include competitors' websites, which can change, move or block access, the email systems of you and your provider, and the payment, hosting and email companies we use.</p>
+
+  <h2>5. If a report is late or missed</h2>
+  <p>If we cannot send a report on time, we will send it as soon as we reasonably can and, where we can, tell you why. If we send you no report at all for a whole billing month for reasons within our control, we will refund that month's payment. Section 12 explains how this affects our liability.</p>
+
+  <h2>6. Price and billing</h2>
   <p>The price is {{ site.price }}{% if site.price_note %} ({{ site.price_note }}){% endif %}. It is charged monthly in advance by card through Stripe and renews automatically until you cancel. If a payment fails, we may pause your reports until it is paid. We will give you at least 30 days' notice by email before any price increase, and you can cancel before it takes effect.</p>
-  <h2>5. Cancelling</h2>
+
+  <h2>7. Cancelling</h2>
   <p>You can cancel at any time by replying to a report email{% if site.contact %} or writing to <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We will confirm your cancellation by email. You keep the service until the end of the month you have paid for, and you will not be charged again. If you cancel after a monthly payment has been taken, that payment is not refunded.</p>
-  <h2>6. Refunds</h2>
-  <p>If we do not send your reports for a billing month for reasons within our control, we will refund that month's payment. Otherwise payments are not refunded, except where the law requires it.</p>
-  <h2>7. Your responsibilities</h2>
-  <p>Give us accurate details of the competitors you want watched. Use the reports for your own business and do not resell them.</p>
-  <h2>8. Our responsibility</h2>
-  <p>Reports are information, not advice. Pricing and menu decisions are yours. Nothing in these terms limits any liability that cannot be limited by law.</p>
-  <h2>9. Changes</h2>
-  <p>We may change the service or these terms. We will tell you by email before a change that affects you takes effect.</p>
-  <h2>10. Law</h2>
-  <p>These terms are governed by the law of England and Wales.</p>
+
+  <h2>8. Other refunds</h2>
+  <p>Apart from the refunds in sections 5, 9 and 13, payments are not refunded, except where the law requires it.</p>
+
+  <h2>9. Pausing, changing and ending the service</h2>
+  <p>We may pause the service for a short time for maintenance or security work, and will try to tell you first where we can. We may pause your reports if a payment fails. We may end your service straight away if you seriously break these terms. We may also stop offering the service by giving you at least 30 days' notice. If we end the service for any reason other than your breach, we will refund any payment for a period after the service ends.</p>
+
+  <h2>10. Your responsibilities</h2>
+  <ul>
+    <li>Give us accurate details of the competitors you want watched, and keep your contact email up to date.</li>
+    <li>Add our sending address to your safe senders list, and check your spam folder if a report does not arrive.</li>
+    <li>Use the reports for your own business only. Do not resell or publish them.</li>
+    <li>Do not misuse the website or try to interfere with it.</li>
+  </ul>
+
+  <h2>11. Reports are information, not advice</h2>
+  <p>We take reasonable care, but a report may contain errors or leave something out, for example when a competitor changes the layout of its page. Check anything important on the competitor's own menu before you act on it. Pricing and menu decisions are yours.</p>
+
+  <h2>12. Limits on our liability</h2>
+  <ul>
+    <li>We are not liable for loss of profit, revenue, business, goodwill or savings, or for any indirect or consequential loss.</li>
+    <li>For reports that are late, missed or incomplete, our liability is limited to the refund described in section 5.</li>
+    <li>Our total liability to you for everything else, in any 12-month period, is limited to the fees you paid us in the 12 months before the event that caused the claim.</li>
+    <li>Nothing in these terms limits or excludes liability for death or personal injury caused by negligence, for fraud or fraudulent misrepresentation, or for anything else that cannot be limited or excluded by law.</li>
+  </ul>
+
+  <h2>13. Events outside our control</h2>
+  <p>We are not responsible for a delay or failure caused by events outside our reasonable control. These include power or internet failures, outages at our hosting, email or payment providers, cyber attacks, and changes to or blocking by competitors' websites. If such an event stops the service for more than 30 days, either of us may cancel, and we will refund any payment for a period you have paid for but not received.</p>
+
+  <h2>14. Changes to these terms</h2>
+  <p>We may change these terms or the service. We will tell you by email before a change that affects you takes effect. Price increases need at least 30 days' notice, as set out in section 6.</p>
+
+  <h2>15. Questions and complaints</h2>
+  <p>If you have a problem or a complaint, {% if site.contact %}email <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% else %}contact us{% endif %}. We will look into it and reply as soon as we reasonably can.</p>
+
+  <h2>16. General</h2>
+  <p>These terms are the whole agreement between you and us about the service. Only you and we can enforce them. If any part is found to be unenforceable, the rest still applies. The law of England and Wales applies, and the courts of England and Wales have jurisdiction.</p>
 </div></main>
 {% endblock %}
