@@ -100,9 +100,14 @@ CHECKOUT_MODE = "subscription"   # monthly fee. Use "payment" for a one-off char
 # fixed_by_ui values, as configured in Checkout Studio.
 CHECKOUT_FIXED = {
     "billing_address_collection": "auto",
+    "payment_method_collection": "always",       # sent in subscription mode only
     "allow_promotion_codes": False,
+    # Shows a tick box for your terms. Stripe needs your Terms of service URL set in the Dashboard
+    # (Settings, Business, Public details) or it will not create any payment page.
+    "consent_collection": {"terms_of_service": "required"},
     "submit_type": "auto",                       # sent in payment mode only
     "integration_identifier": "hosted_web_0004",
+    "saved_payment_method_options": {"payment_method_save": "enabled"},
     "origin_context": "web",
 }
 
@@ -133,6 +138,8 @@ def _flatten(prefix, value, out):
 def checkout_params(price_id, success_url, cancel_url, customer_email=None,
                     client_reference_id=None, ui_mode="hosted_page", skip=()):
     fixed = dict(CHECKOUT_FIXED)
+    if CHECKOUT_MODE != "subscription":
+        fixed.pop("payment_method_collection", None)   # Stripe allows it in subscription mode only
     if CHECKOUT_MODE != "payment":
         fixed.pop("submit_type", None)           # Stripe allows it in payment mode only
     params = {
@@ -185,5 +192,11 @@ def create_checkout_session(key, price_id, success_url, cancel_url, customer_ema
                 continue
             if param == "ui_mode" and ui_mode == "hosted_page":
                 break                    # try the older name
-            raise StripeError(err.get("message") or f"Stripe error {r.status_code}")
+            message = err.get("message") or f"Stripe error {r.status_code}"
+            if "terms of service" in message.lower() or "consent_collection" in (param or ""):
+                raise StripeError("Stripe needs your Terms of service URL before it can show the terms tick box. "
+                                  "In Stripe, open Settings, then Business, then Public details, and enter the "
+                                  "address of your terms page, for example https://www.yourdomain.co.uk/terms. "
+                                  "Then try again.")
+            raise StripeError(message)
     raise StripeError("Stripe did not accept the payment page settings.")
