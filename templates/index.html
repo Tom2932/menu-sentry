@@ -10,7 +10,7 @@
       {{ signup('Sign up for ' ~ site.price) }}
       <a class="btn ghost" href="#example">See an example report</a>
     </div>
-    <p class="fine">For businesses. Cancel any time and keep the service until the end of the month you have paid for. Payment is handled securely by Stripe.</p>
+    <p class="fine">For businesses. Cancel any time and keep the service until the end of your current paid billing period. Payment is handled securely by Stripe.</p>
   </div>
 </section>
 
@@ -124,7 +124,7 @@
   <div class="wrap narrow">
     <h2>Questions</h2>
     <details><summary>Which menus can you read?</summary>
-      <p>Public web pages and PDF menus where the prices are written as text. We do not cover delivery apps. We only read what a competitor publishes on their own website, and we follow each site's robots.txt rules.</p></details>
+      <p>Public web pages and PDF menus where the prices are written as text. We do not cover delivery apps. We only read what a competitor publishes on their own website, and we respect website access instructions such as robots.txt.</p></details>
     <details><summary>How do I choose my competitors?</summary>
       <p>After you sign up, email us the names of the restaurants you want to follow and a link to each one's menu.</p></details>
     <details><summary>What if a competitor's menu cannot be read?</summary>
@@ -134,7 +134,7 @@
     <details><summary>Is {{ site.name }} for businesses only?</summary>
       <p>Yes. It is for restaurants, cafes and other businesses. By signing up you confirm you are buying for the purposes of your business.</p></details>
     <details><summary>How do I cancel?</summary>
-      <p>Reply to any report email{% if site.contact %} or write to <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We will confirm by email. You keep the service until the end of the month you have paid for, and a payment already taken is not refunded. See the <a href="/terms">terms</a>.</p></details>
+      <p>Reply to any report email{% if site.contact %} or write to <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We will confirm by email. You keep access until the end of your current paid billing period, and cancelling stops the next renewal. Payments already made for the current period are not refundable unless the terms or the law say otherwise. See the <a href="/terms">terms</a>.</p></details>
     <details><summary>What if a payment fails?</summary>
       <p>We may pause your reports until the payment is made. If we fail to send your reports for a month for reasons within our control, we refund that month's payment.</p></details>
     <details><summary>How is payment handled?</summary>

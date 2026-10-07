@@ -69,7 +69,7 @@ def _pick_db_path():
 
 REVIEWS_DB = _pick_db_path()
 PORT = int(os.environ.get("PORT", 5056))
-LEGAL_UPDATED = "6 October 2026"
+LEGAL_UPDATED = "7 October 2026"
 PUBLIC_FILES = {"style.css", "logo.svg", "logo.png", "logo-transparent.png", "icon.svg", "icon.png"}
 REQUIRED_FILES = [
     "templates/base.html", "templates/macros.html", "templates/index.html", "templates/message.html",
@@ -109,6 +109,12 @@ def setting(env_name, config_key):
 
 def domain():
     return (os.environ.get("DOMAIN") or request.host_url).rstrip("/")
+
+
+if not os.environ.get("LEGAL_NAME", "").strip():
+    app.logger.warning("LEGAL_NAME is not set. The terms say only that %s is a trading name. Set LEGAL_NAME to "
+                       "the legal name of the person or company behind the business before you go live.",
+                       os.environ.get("PRODUCT_NAME", "Menu Sentry"))
 
 
 @app.context_processor
