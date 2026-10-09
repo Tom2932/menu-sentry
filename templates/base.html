@@ -26,7 +26,7 @@
   <div class="wrap foot">
     <div>
       <img src="/logo.svg" alt="{{ site.name }}" height="30">
-      <p class="fine">&copy; {{ site.year }} {{ site.legal_name or site.name }}{% if site.address %}<br>{{ site.address }}{% endif %}</p>
+      <p class="fine">&copy; {{ site.year }} {{ site.legal_name or site.name }}{% if site.company_number %}<br>Company number {{ site.company_number }}{% endif %}{% if site.address %}<br>{{ site.address }}{% endif %}</p>
     </div>
     <nav aria-label="Footer">
       <a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/reviews-policy">Reviews policy</a>

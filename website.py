@@ -19,6 +19,7 @@ Settings come from environment variables:
   CONTACT_EMAIL     shown on the site and used for support
   LEGAL_NAME        your name or company name, shown in the footer and terms
   BUSINESS_ADDRESS  optional, shown in the footer
+  COMPANY_NUMBER    optional, your Companies House number if the business is a limited company
   ICO_REGISTRATION  optional, your ICO registration number if you pay the data protection fee
   REVIEWS_DB        where reviews are stored, default reviews.db next to this file
 For local testing only, STRIPE_API_KEY and STRIPE_PRICE_ID fall back to the Stripe settings saved by
@@ -69,7 +70,7 @@ def _pick_db_path():
 
 REVIEWS_DB = _pick_db_path()
 PORT = int(os.environ.get("PORT", 5056))
-LEGAL_UPDATED = "7 October 2026"
+LEGAL_UPDATED = "9 October 2026"
 PUBLIC_FILES = {"style.css", "logo.svg", "logo.png", "logo-transparent.png", "icon.svg", "icon.png"}
 REQUIRED_FILES = [
     "templates/base.html", "templates/macros.html", "templates/index.html", "templates/message.html",
@@ -111,10 +112,11 @@ def domain():
     return (os.environ.get("DOMAIN") or request.host_url).rstrip("/")
 
 
-if not os.environ.get("LEGAL_NAME", "").strip():
-    app.logger.warning("LEGAL_NAME is not set. The terms say only that %s is a trading name. Set LEGAL_NAME to "
-                       "the legal name of the person or company behind the business before you go live.",
-                       os.environ.get("PRODUCT_NAME", "Menu Sentry"))
+_legal = os.environ.get("LEGAL_NAME", "").strip()
+if not _legal or _legal.lower() == os.environ.get("PRODUCT_NAME", "Menu Sentry").lower():
+    app.logger.warning("LEGAL_NAME is missing or is the same as the trading name, so the terms cannot say who is "
+                       "behind %s. Set LEGAL_NAME to the legal name of the person or company, and COMPANY_NUMBER "
+                       "if it is a limited company, before you go live.", os.environ.get("PRODUCT_NAME", "Menu Sentry"))
 
 
 @app.context_processor
@@ -128,6 +130,7 @@ def inject_site():
             "legal_name": os.environ.get("LEGAL_NAME", "").strip(),
             "address": os.environ.get("BUSINESS_ADDRESS", "").strip(),
             "ico": os.environ.get("ICO_REGISTRATION", "").strip(),
+            "company_number": os.environ.get("COMPANY_NUMBER", "").strip(),
             "year": datetime.now().year,
             "updated": LEGAL_UPDATED,
         },
