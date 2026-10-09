@@ -270,7 +270,7 @@ def create_checkout_session():
         session_data = payments.create_checkout_session(
             key, price,
             success_url=f"{domain()}/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{domain()}/cancel")
+            cancel_url=f"{domain()}/")   # back to the home page
     except Exception as e:  # never show Stripe error details to a visitor
         app.logger.error("Could not create checkout session: %s", e)
         return message("Sorry, checkout did not start", "Please try again in a minute.", 502)
@@ -284,7 +284,8 @@ def success():
 
 @app.route("/cancel")
 def cancel():
-    return message("No payment was taken", "You can go back and sign up whenever you are ready.")
+    """Customers who back out of Stripe's page go straight to the home page."""
+    return redirect("/", code=303)
 
 
 # ---------------------------------------------------------------- customer reviews
