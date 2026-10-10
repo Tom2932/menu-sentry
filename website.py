@@ -70,7 +70,7 @@ def _pick_db_path():
 
 REVIEWS_DB = _pick_db_path()
 PORT = int(os.environ.get("PORT", 5056))
-LEGAL_UPDATED = "9 October 2026"
+LEGAL_UPDATED = "10 October 2026"
 PUBLIC_FILES = {"style.css", "logo.svg", "logo.png", "logo-transparent.png", "icon.svg", "icon.png"}
 REQUIRED_FILES = [
     "templates/base.html", "templates/macros.html", "templates/index.html", "templates/message.html",
