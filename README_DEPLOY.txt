@@ -15,6 +15,7 @@ Environment variables to add on the host:
   DOMAIN             https://www.yourdomain.co.uk   (the exact address customers use)
   ADMIN_PASSWORD     a long password for /admin
   SECRET_KEY         a long random string
+  CANCEL_URL         optional, where people go if they back out of payment, e.g. /#pricing (default: home page)
   CONTACT_EMAIL      your support email
   LEGAL_NAME         your name or company name
   BUSINESS_ADDRESS   your address

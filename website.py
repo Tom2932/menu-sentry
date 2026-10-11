@@ -19,6 +19,7 @@ Settings come from environment variables:
   CONTACT_EMAIL     shown on the site and used for support
   LEGAL_NAME        your name or company name, shown in the footer and terms
   BUSINESS_ADDRESS  optional, shown in the footer
+  CANCEL_URL        optional, where people go if they back out of payment, for example /#pricing
   COMPANY_NUMBER    optional, your Companies House number if the business is a limited company
   HOSTING_REGION    optional, where the host runs your site, for example "Frankfurt, Germany"
   HOSTING_PROVIDER, HOSTING_PRIVACY_URL   optional, default Render and its privacy page
@@ -270,6 +271,16 @@ def public_file(name):
 
 # ---------------------------------------------------------------- checkout
 
+def cancel_target():
+    """Where Stripe sends people who back out. Default is the home page. Set CANCEL_URL on the host to change it."""
+    custom = os.environ.get("CANCEL_URL", "").strip()
+    if custom.startswith(("https://", "http://")):
+        return custom
+    if custom.startswith("/"):
+        return f"{domain()}{custom}"          # for example /#pricing
+    return f"{domain()}/"
+
+
 @app.route("/create-checkout-session", methods=["POST"])
 def create_checkout_session():
     key = setting("STRIPE_API_KEY", "api_key")
@@ -281,7 +292,7 @@ def create_checkout_session():
         session_data = payments.create_checkout_session(
             key, price,
             success_url=f"{domain()}/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{domain()}/")   # back to the home page
+            cancel_url=cancel_target())
     except Exception as e:  # never show Stripe error details to a visitor
         app.logger.error("Could not create checkout session: %s", e)
         return message("Sorry, checkout did not start", "Please try again in a minute.", 502)
