@@ -20,6 +20,9 @@ Settings come from environment variables:
   LEGAL_NAME        your name or company name, shown in the footer and terms
   BUSINESS_ADDRESS  optional, shown in the footer
   COMPANY_NUMBER    optional, your Companies House number if the business is a limited company
+  HOSTING_REGION    optional, where the host runs your site, for example "Frankfurt, Germany"
+  HOSTING_PROVIDER, HOSTING_PRIVACY_URL   optional, default Render and its privacy page
+  EMAIL_PROVIDER, EMAIL_PRIVACY_URL       optional, who sends your emails, shown in the privacy notice
   ICO_REGISTRATION  optional, your ICO registration number if you pay the data protection fee
   REVIEWS_DB        where reviews are stored, default reviews.db next to this file
 For local testing only, STRIPE_API_KEY and STRIPE_PRICE_ID fall back to the Stripe settings saved by
@@ -131,6 +134,11 @@ def inject_site():
             "address": os.environ.get("BUSINESS_ADDRESS", "").strip(),
             "ico": os.environ.get("ICO_REGISTRATION", "").strip(),
             "company_number": os.environ.get("COMPANY_NUMBER", "").strip(),
+            "hosting_provider": os.environ.get("HOSTING_PROVIDER", "Render").strip() or "Render",
+            "hosting_privacy_url": os.environ.get("HOSTING_PRIVACY_URL", "https://render.com/privacy").strip(),
+            "hosting_region": os.environ.get("HOSTING_REGION", "").strip(),
+            "email_provider": os.environ.get("EMAIL_PROVIDER", "").strip(),
+            "email_privacy_url": os.environ.get("EMAIL_PRIVACY_URL", "").strip(),
             "year": datetime.now().year,
             "updated": LEGAL_UPDATED,
         },
@@ -395,6 +403,19 @@ def admin_approve(review_id):
     con = db()
     con.execute("UPDATE reviews SET status='approved', decided_at=?, reject_reason=NULL WHERE id=?",
                 (now(), review_id))
+    con.commit()
+    con.close()
+    return redirect("/admin")
+
+
+@app.route("/admin/review/<int:review_id>/anonymise", methods=["POST"])
+@admin_required
+def admin_anonymise(review_id):
+    """Remove a reviewer's name and business from a published review when they withdraw consent to naming them."""
+    check_csrf()
+    con = db()
+    con.execute("UPDATE reviews SET reviewer='A customer', business='', reject_reason=? WHERE id=? AND status='approved'",
+                (f"Name and business removed at the reviewer's request on {now()[:10]}", review_id))
     con.commit()
     con.close()
     return redirect("/admin")

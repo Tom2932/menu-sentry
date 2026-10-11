@@ -6,47 +6,60 @@
   <p>Last updated {{ site.updated }}.</p>
 
   <h2>Who is responsible</h2>
-  <p>{{ site.legal_name or site.name }}{% if site.address %}, {{ site.address }}{% endif %}{% if site.contact %}. Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We decide how your personal data is used, so we are the "controller" under UK data protection law.</p>
+  <p>{{ site.legal_name or site.name }}{% if site.address %}, {{ site.address }}{% endif %}. We decide how your personal data is used, so we are the "controller" under UK data protection law.{% if site.contact %} To contact us about your data, email <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
   {% if site.ico %}<p>We are registered with the Information Commissioner's Office. Registration number: {{ site.ico }}.</p>{% endif %}
 
-  <h2>What we hold</h2>
-  <ul>
-    <li>Your name, email address and business name, and the email addresses of anyone you ask us to send reports to.</li>
-    <li>The competitors and menu links you ask us to watch.</li>
-    <li>Payment details are handled by Stripe. We receive confirmation that you have paid, your name and email, and your subscription status. We do not see or store your card number.</li>
-    <li>Any review you choose to submit, with the name, role and business name you give.</li>
-    <li>Messages you send us.</li>
-    <li>Basic server records, such as the time of a visit and your IP address, kept for security.</li>
-  </ul>
-  <p>The competitor menus we read are public business information. We do not collect personal data about competitors' customers.</p>
+  <h2>What we do with your data</h2>
+  <p>This table shows what we hold, why we use it, our legal basis and how long we keep it. We set these periods by what we need the data for and by what the law requires. When a period ends we delete the data or make it anonymous.</p>
+  <div class="table-wrap">
+  <table>
+    <tr><th>What we hold</th><th>Why we use it</th><th>Legal basis</th><th>How long we keep it</th></tr>
+    <tr><td>Your name, email address and business name. The email addresses of anyone you ask us to send reports to. The competitors and menu links you ask us to watch.</td><td>To provide the service and keep in touch about it.</td><td>Contract</td><td>While you are a customer, and for up to 12 months after your subscription ends.</td></tr>
+    <tr><td>Payment records: confirmation of payment, the name and email you gave Stripe, amounts, dates and subscription status. We never see your card number.</td><td>To bill you, keep accounts and meet tax duties.</td><td>Contract, and legal obligation</td><td>For as long as the law requires accounting records to be kept, usually up to six years.</td></tr>
+    <tr><td>A record of each report we send you (date, recipients and subject), and the menu snapshots we compare.</td><td>To run the service, and to show what we sent if there is a question.</td><td>Contract, and our legitimate interests in keeping proof of what we sent</td><td>For up to 12 months after your subscription ends.</td></tr>
+    <tr><td>Messages you send us, and our replies.</td><td>To answer you and handle complaints.</td><td>Our legitimate interests in running the business, and contract</td><td>For up to 12 months after we last contact you about the matter.</td></tr>
+    <tr><td>A review you submit: your name, role, business name, the review and the date you agreed to publication.</td><td>To publish your review on our website.</td><td>Your consent</td><td>Until you withdraw your consent or ask us to remove it.</td></tr>
+    <tr><td>Website visit records: your IP address, the time and the pages requested.</td><td>To keep the website secure and working.</td><td>Our legitimate interests in security</td><td>Kept by our hosting provider for the period it sets. We do not copy them elsewhere.</td></tr>
+  </table>
+  </div>
+  <p>We do not sell your data. We do not use it for advertising or to make automated decisions about you.</p>
 
-  <h2>Why we use it, and our legal basis</h2>
-  <ul>
-    <li>To provide and bill for the service: it is needed to carry out our contract with you.</li>
-    <li>To keep accounts and tax records: we are required by law to keep them.</li>
-    <li>To answer you and keep the site secure: this is in our legitimate interests as a business.</li>
-    <li>To publish a review you submit: you agree when you submit it, and you can withdraw that agreement by emailing us. We will then remove your name and business name from the review, or remove the review if you ask us to.</li>
-  </ul>
-  <p>We do not sell your data and we do not use it for advertising.</p>
+  <h2>Reviews</h2>
+  <p>We publish a review only if you tick a separate box when you submit it. Your review appears on our website only, with the name, role and business name you give. We do not use it anywhere else unless you agree separately. You can withdraw your agreement at any time by emailing us. We will then promptly remove your name and business name from the review, or remove the review, as you choose.</p>
 
   <h2>Who else sees it</h2>
-  <p>Companies that help us run the service, such as Stripe for payments and our email and hosting providers. They may only use it for that purpose.</p>
-  <p>Some of these companies may store or process data outside the UK. When they do, the transfer must be covered by safeguards that UK data protection law requires.</p>
+  <p>Companies that help us run the service. They may only use your data for that purpose.</p>
+  <ul>
+    <li><b>Stripe</b> takes payments and handles your card details. <a href="https://stripe.com/gb/privacy">Stripe's privacy information</a>.</li>
+    <li><b>{{ site.hosting_provider }}</b> hosts this website and the review records{% if site.hosting_region %} in {{ site.hosting_region }}{% endif %}. <a href="{{ site.hosting_privacy_url }}">{{ site.hosting_provider }}'s privacy information</a>.</li>
+    <li><b>{{ site.email_provider or 'Our email provider' }}</b> sends our reports and messages.{% if site.email_privacy_url %} <a href="{{ site.email_privacy_url }}">Its privacy information</a>.{% endif %}</li>
+  </ul>
+  <p>Customer records and report history are kept on our own computer. The website and the review records are kept with our hosting provider.</p>
 
-  <h2>How long we keep it</h2>
-  <p>While you are a customer. Afterwards we may keep information where reasonably necessary for legal, accounting or legitimate business purposes, including keeping accounting records for as long as the law requires. Messages and server records are kept only for as long as we need them.</p>
+  <h2>Transfers outside the UK</h2>
+  <p>Some of these companies are based outside the UK or may process data outside it. We check that each one relies on a safeguard that UK data protection law allows, such as the UK's adequacy regulations, the International Data Transfer Agreement or the UK Addendum to the EU's standard contractual clauses. Each company's privacy information, linked above, explains where it processes data and which safeguard it uses.</p>
 
   <h2>How we protect it</h2>
   <p>We use reasonable technical and organisational measures to protect your data. Card details stay with Stripe and never reach our servers, our admin areas are password protected, and we limit who can access the data. No system is completely secure.</p>
 
   <h2>If something goes wrong with your data</h2>
-  <p>If a security incident affects your personal data in a way that is likely to harm you, we will tell you without undue delay. Where the law requires it, we will also report it to the Information Commissioner's Office.</p>
+  <p>We keep a record of every security incident. If an incident is likely to put people's rights and freedoms at risk, we report it to the Information Commissioner's Office within 72 hours of becoming aware of it, where we can. If it is likely to cause a high risk to you, we will also tell you without undue delay.</p>
 
   <h2>Your rights</h2>
-  <p>You can ask to see, correct or delete the data we hold about you. You can also ask us to restrict how we use it, object to how we use it, and ask for a copy in a form you can move to another provider. Email us to do any of these. You can complain to the Information Commissioner's Office (ico.org.uk).</p>
+  <p>You can ask to see, correct or delete the data we hold about you. You can also ask us to restrict how we use it, object to how we use it, and ask for a copy in a form you can move to another provider.</p>
+  <p>To use any of these rights, email us{% if site.contact %} at <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We will reply in line with data protection law, normally within one month. We may need to check who you are first. Some rights apply only in certain situations. For example, the right to a portable copy applies only to data you gave us that we process by automated means under a contract or with your consent.</p>
 
-  <h2>Cookies</h2>
-  <p>We use no advertising or analytics cookies. Stripe's script, loaded on this site to help prevent fraud, may set cookies for that purpose. The admin area uses a login cookie.</p>
+  <h2>Complaints</h2>
+  <p>If you are unhappy with how we handle your data, please contact us first so we can try to put it right. You can also complain to the Information Commissioner's Office at any time:</p>
+  <ul>
+    <li>Website: <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</a></li>
+    <li>Helpline: 0303 123 1113</li>
+    <li>Post: Information Commissioner's Office, Wycliffe House, Water Lane, Wilmslow, Cheshire SK9 5AF</li>
+  </ul>
+
+  <h2>Cookies and similar technologies</h2>
+  <p>This website sets no cookies on your device when you browse it, and we use no advertising or analytics tools. The admin area, which only we use, sets a login cookie.</p>
+  <p>When you press Sign up you go to a payment page run by Stripe. Stripe sets its own cookies there, for example to prevent fraud. You can read about them in <a href="https://stripe.com/cookie-settings">Stripe's cookie information</a>.</p>
 
   <h2>Changes to this notice</h2>
   <p>We may update this notice. The date at the top shows when it last changed.</p>

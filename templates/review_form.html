@@ -13,7 +13,8 @@
       {% for n in range(5, 0, -1) %}<label class="radio"><input type="radio" name="rating" value="{{ n }}" required {{ 'checked' if values.get('rating') == n|string }}> {{ n }}</label>{% endfor %}
     </fieldset>
     <label>Your review (20 to 1000 characters)<textarea name="body" rows="6" minlength="20" maxlength="1000" required>{{ values.get('body', '') }}</textarea></label>
-    <label class="check"><input type="checkbox" name="consent" required> I agree that {{ site.name }} may publish this review with my name, role and business name.</label>
+    <p class="fine">If you agree, your review appears on this website only, with the name, role and business name you give. We do not use it anywhere else without asking you separately. See our <a href="/privacy">privacy notice</a>.</p>
+    <label class="check"><input type="checkbox" name="consent" required> I agree that {{ site.name }} may publish this review, with my name, role and business name, on the {{ site.name }} website. I understand I can withdraw this agreement at any time{% if site.contact %} by emailing {{ site.contact }}{% endif %}.</label>
     <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
     <button type="submit" class="btn">Submit review</button>
   </form>

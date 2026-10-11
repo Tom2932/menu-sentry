@@ -51,6 +51,10 @@
   <div class="card rev">
     <p><b>{{ r.rating }}/5</b> from {{ r.reviewer }}, {{ r.business }} <span class="muted">{{ r.created_at[:10] }}</span></p>
     <blockquote>{{ r.body }}</blockquote>
+    <div class="row">
+      <form method="post" action="/admin/review/{{ r.id }}/anonymise" onsubmit="return confirm('Remove this reviewer\'s name and business name from the published review? The review text and rating stay.')">
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn small ghost" type="submit">Remove name and business</button></form>
+    </div>
     {{ reject_form(r) }}
   </div>
   {% else %}<p class="muted">Nothing published yet.</p>{% endfor %}

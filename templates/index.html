@@ -109,7 +109,7 @@
         <figure class="card review">
           <div>{{ stars(r.rating) }}</div>
           <blockquote>{{ r.body }}</blockquote>
-          <figcaption>{{ r.reviewer }}, {{ r.business }} <span class="tag cust">Customer</span></figcaption>
+          <figcaption>{{ r.reviewer }}{% if r.business %}, {{ r.business }}{% endif %} <span class="tag cust">Customer</span></figcaption>
         </figure>
         {% endfor %}
       </div>

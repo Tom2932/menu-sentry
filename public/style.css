@@ -120,3 +120,8 @@ details p { margin: 10px 0 0; color: var(--muted); }
   .bar { justify-content: space-between; }
   .section { padding: 44px 0; }
 }
+
+.table-wrap { overflow-x: auto; margin: 0 0 1em; }
+.prose table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.prose th, .prose td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; text-align: left; }
+.prose th { background: var(--soft); color: var(--navy); }
