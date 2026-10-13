@@ -1,10 +1,30 @@
 {% extends 'base.html' %}
-{% block title %}Thanks for your order! | {{ site.name }}{% endblock %}
+{% set mail_subject = site.name ~ ': my competitors' %}
+{% set mail_body = "Business name:\nYour name:\nEmail address(es) to send the report to:\n\nCompetitors to watch (name and a link to their menu page):\n1.\n2.\n3.\n" %}
+{% block title %}{{ 'We have not confirmed your payment yet' if confirmed is sameas false else 'Thanks for your order!' }} | {{ site.name }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex">{% endblock %}
 {% block body %}
 <main class="section"><div class="wrap narrow"><div class="card">
+{% if confirmed is sameas false %}
+  <h1>We have not confirmed your payment yet</h1>
+  <p>Your bank may still be processing it, or the payment may not have gone through. Please do not pay again straight away.</p>
+  <p>If you were charged, or this does not change within an hour,{% if site.contact %} email <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% else %} contact us{% endif %} and we will check.</p>
+  <p><a class="btn ghost" href="/">Back to the home page</a></p>
+{% else %}
   <h1>Thanks for your order!</h1>
+  {% if confirmed %}<p><b>Your payment is confirmed.</b> Your reference is {{ ref }}.</p>{% endif %}
   <p>We appreciate your business!{% if site.contact %} If you have any questions, please email <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
-  <p>Next step: {% if site.contact %}email us the names and menu links of the competitors you want watched.{% else %}we will be in touch to set up the competitors you want watched.{% endif %}</p>
+  {% if site.contact %}
+  <h2>What to do next</h2>
+  <ol>
+    <li>Email us the names of the competitors you want watched, a link to each one's menu page, and the email address or addresses that should get the report.
+      <p><a class="btn" href="mailto:{{ site.contact }}?subject={{ mail_subject|urlencode }}&amp;body={{ mail_body|urlencode }}">Email us your competitors</a></p></li>
+    <li>We check that each menu can be read, and tell you if one cannot.</li>
+    <li>Your first report is a starting point and lists no changes. Changes appear from the following week.</li>
+  </ol>
+  {% else %}
+  <p>Next step: we will be in touch to set up the competitors you want watched.</p>
+  {% endif %}
+{% endif %}
 </div></div></main>
 {% endblock %}

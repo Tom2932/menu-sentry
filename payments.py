@@ -200,3 +200,19 @@ def create_checkout_session(key, price_id, success_url, cancel_url, customer_ema
                                   "Then try again.")
             raise StripeError(message)
     raise StripeError("Stripe did not accept the payment page settings.")
+
+
+def get_checkout_session(key, session_id):
+    """Fetch one Checkout Session so the thank-you page can confirm the payment.
+
+    Returns the session dict, {} if Stripe says no such session, or None if it could not be checked
+    (network problem, or the key is not allowed to read sessions)."""
+    try:
+        r = requests.get(f"{API}/checkout/sessions/{session_id}", auth=(key, ""), timeout=15)
+    except requests.RequestException:
+        return None
+    if r.status_code == 200:
+        return r.json()
+    if r.status_code == 404:
+        return {}
+    return None

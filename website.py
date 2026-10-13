@@ -33,6 +33,7 @@ the dashboard. Do not copy config.json to a public server. It holds client data 
 import hmac
 import json
 import os
+import re
 import secrets
 import socket
 import sqlite3
@@ -299,9 +300,42 @@ def create_checkout_session():
     return redirect(session_data["url"], code=303)
 
 
+SESSION_ID_RE = re.compile(r"^cs_(test|live)_[A-Za-z0-9]{10,200}$")
+_confirmed = {}       # session id -> (time, result), so a refreshed page does not call Stripe again
+_lookups = []         # times of recent Stripe lookups, to stop anyone using this page to flood Stripe
+
+
+def payment_confirmed(session_id):
+    """True if Stripe says this payment is complete, False if not, None if it cannot be checked."""
+    if not SESSION_ID_RE.match(session_id or ""):
+        return None
+    now_ = time.time()
+    hit = _confirmed.get(session_id)
+    if hit and now_ - hit[0] < 300:
+        return hit[1]
+    key = setting("STRIPE_API_KEY", "api_key")
+    if not key:
+        return None
+    _lookups[:] = [t for t in _lookups if now_ - t < 60]
+    if len(_lookups) >= 30:
+        return None
+    _lookups.append(now_)
+    found = payments.get_checkout_session(key, session_id)
+    if found is None:
+        return None
+    result = bool(found) and found.get("status") == "complete" and found.get("payment_status") in ("paid", "no_payment_required")
+    if len(_confirmed) > 500:
+        _confirmed.clear()
+    _confirmed[session_id] = (now_, result)
+    return result
+
+
 @app.route("/success")
 def success():
-    return render_template("success.html")
+    session_id = request.args.get("session_id", "")
+    confirmed = payment_confirmed(session_id)
+    ref = session_id[-8:].upper() if confirmed else ""
+    return render_template("success.html", confirmed=confirmed, ref=ref)
 
 
 @app.route("/cancel")
