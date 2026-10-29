@@ -20,7 +20,9 @@ Settings come from environment variables:
   LEGAL_NAME        your name or company name, shown in the footer and terms
   BUSINESS_ADDRESS  optional, shown in the footer
   CANCEL_URL        optional, where people go if they back out of payment, for example /#pricing
+  BUSINESS_TYPE     optional, your legal status, for example "a sole trader" or "a private limited company"
   COMPANY_NUMBER    optional, your Companies House number if the business is a limited company
+  VAT_NUMBER        optional, your VAT registration number if you are VAT registered
   HOSTING_REGION    optional, where the host runs your site, for example "Frankfurt, Germany"
   HOSTING_PROVIDER, HOSTING_PRIVACY_URL   optional, default Render and its privacy page
   EMAIL_PROVIDER, EMAIL_PRIVACY_URL       optional, who sends your emails, shown in the privacy notice
@@ -31,6 +33,7 @@ the dashboard. Do not copy config.json to a public server. It holds client data 
 """
 
 import hmac
+from html.parser import HTMLParser
 import json
 import os
 import re
@@ -57,6 +60,7 @@ def _pick_db_path():
     """Store reviews next to this file, or in your home folder if that folder is read-only."""
     chosen = os.environ.get("REVIEWS_DB")
     if chosen:
+        Path(chosen).parent.mkdir(parents=True, exist_ok=True)
         return Path(chosen)
     here = BASE / "reviews.db"
     try:
@@ -75,7 +79,7 @@ def _pick_db_path():
 
 REVIEWS_DB = _pick_db_path()
 PORT = int(os.environ.get("PORT", 5056))
-LEGAL_UPDATED = "10 October 2026"
+LEGAL_UPDATED = "26 October 2026"
 PUBLIC_FILES = {"style.css", "logo.svg", "logo.png", "logo-transparent.png", "icon.svg", "icon.png"}
 REQUIRED_FILES = [
     "templates/base.html", "templates/macros.html", "templates/index.html", "templates/message.html",
@@ -136,6 +140,9 @@ def inject_site():
             "address": os.environ.get("BUSINESS_ADDRESS", "").strip(),
             "ico": os.environ.get("ICO_REGISTRATION", "").strip(),
             "company_number": os.environ.get("COMPANY_NUMBER", "").strip(),
+            "business_type": os.environ.get("BUSINESS_TYPE", "").strip(),
+            "vat_number": os.environ.get("VAT_NUMBER", "").strip(),
+            "test_mode": bool(os.environ.get("CW_TEST_MODE")),
             "hosting_provider": os.environ.get("HOSTING_PROVIDER", "Render").strip() or "Render",
             "hosting_privacy_url": os.environ.get("HOSTING_PRIVACY_URL", "https://render.com/privacy").strip(),
             "hosting_region": os.environ.get("HOSTING_REGION", "").strip(),
@@ -228,8 +235,13 @@ def admin_required(view):
 
 # ---------------------------------------------------------------- pages
 
-def message(title, text, code=200):
-    return render_template("message.html", title=title, text=text), code
+def local_request():
+    return request.host.startswith(("127.0.0.1", "localhost"))
+
+
+def message(title, text, code=200, detail=""):
+    """The reason is shown only when you run the site on your own computer, never to the public."""
+    return render_template("message.html", title=title, text=text, detail=detail if local_request() else ""), code
 
 
 @app.route("/")
@@ -245,6 +257,43 @@ def index():
 @app.route("/terms")
 def terms():
     return render_template("terms.html")
+
+
+class _TermsText(HTMLParser):
+    """Turns the terms page into plain text, so customers can download a copy without any extra library."""
+    def __init__(self):
+        super().__init__()
+        self.lines, self.buf, self.inside = [], [], False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "main":
+            self.inside = True
+        if self.inside and tag == "li":
+            self.buf.append("- ")
+
+    def handle_endtag(self, tag):
+        if tag == "main":
+            self.inside = False
+        if self.inside and tag in ("h1", "h2", "p", "li"):
+            text = re.sub(r"\s+", " ", "".join(self.buf)).strip()
+            if text:
+                self.lines.append(("\n" + text.upper() if tag == "h2" else text) if tag != "li" else text)
+            self.buf = []
+
+    def handle_data(self, data):
+        if self.inside:
+            self.buf.append(data)
+
+
+@app.route("/terms.txt")
+def terms_text():
+    parser = _TermsText()
+    parser.feed(render_template("terms.html"))
+    body = re.sub(r"\n{3,}", "\n\n", "\n\n".join(parser.lines).replace("\n\n- ", "\n- "))
+    name = os.environ.get("PRODUCT_NAME", "Menu Sentry")
+    stamp = re.sub(r"[^a-z0-9]+", "-", LEGAL_UPDATED.lower()).strip("-")
+    return Response(body + "\n", mimetype="text/plain",
+                    headers={"Content-Disposition": f'attachment; filename="{name.lower().replace(" ", "-")}-terms-{stamp}.txt"'})
 
 
 @app.route("/privacy")
@@ -287,16 +336,27 @@ def create_checkout_session():
     key = setting("STRIPE_API_KEY", "api_key")
     price = setting("STRIPE_PRICE_ID", "price_id")
     if not key or not price:
+        if not key:
+            why = ("No Stripe key was found. In the dashboard window with the yellow TEST MODE banner, open Settings, "
+                   "Payments with Stripe, paste your test key and press Save and test Stripe connection. "
+                   "(On a live host, set STRIPE_API_KEY.)")
+        else:
+            why = ("No Stripe Price ID was found. In the same Settings box, replace the example value price_... with "
+                   "your test Price ID, which starts with price_ and has letters and numbers after it. "
+                   "(On a live host, set STRIPE_PRICE_ID.)")
         app.logger.error("Website is missing STRIPE_API_KEY or STRIPE_PRICE_ID")
-        return message("Sign-up is not open yet", "Please check back soon.", 503)
+        return message("Sign-up is not open yet", "Please check back soon.", 503, detail=why)
     try:
+        terms_url = f"{domain()}/terms"
         session_data = payments.create_checkout_session(
             key, price,
             success_url=f"{domain()}/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=cancel_target())
+            cancel_url=cancel_target(),
+            submit_message=payments.renewal_message(terms_url, os.environ.get("PRICE_TEXT", "\u00a340 per month")),
+            terms_message=payments.terms_label(terms_url))
     except Exception as e:  # never show Stripe error details to a visitor
         app.logger.error("Could not create checkout session: %s", e)
-        return message("Sorry, checkout did not start", "Please try again in a minute.", 502)
+        return message("Sorry, checkout did not start", "Please try again in a minute.", 502, detail=str(e))
     return redirect(session_data["url"], code=303)
 
 

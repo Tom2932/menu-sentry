@@ -7,7 +7,7 @@
 
   <h2>1. Who we are</h2>
   {% set named = site.legal_name and site.legal_name|lower != site.name|lower %}
-  <p>{% if named %}{{ site.name }} is a trading name of {{ site.legal_name }}{% if site.company_number %}, a company with company number {{ site.company_number }}{% endif %}{% if site.address %}, of {{ site.address }}{% endif %}.{% else %}{{ site.name }} is a trading name of the business that runs this website.{% endif %}{% if site.contact %} Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
+  <p>{% if named %}{{ site.name }} is a trading name of {{ site.legal_name }}{% if site.business_type %}, {{ site.business_type }}{% endif %}{% if site.company_number %}, company number {{ site.company_number }}{% endif %}{% if site.address %}, of {{ site.address }}{% endif %}.{% else %}{{ site.name }} is a trading name of the business that runs this website.{% endif %}{% if site.vat_number %} VAT registration number: {{ site.vat_number }}.{% endif %}{% if site.contact %} Contact: <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>.{% endif %}</p>
 
   <h2>2. Business customers only</h2>
   <p>{{ site.name }} is for businesses. By signing up you confirm that you are buying for the purposes of your business and that you have authority to agree these terms for it.</p>
@@ -58,9 +58,9 @@
   <h2>14. Limits on our liability</h2>
   <ul>
     <li>We are not liable for loss of profit, revenue, business, goodwill or savings, or for any indirect or consequential loss.</li>
-    <li>For reports that are late, missed or incomplete, our liability is limited to the refund described in section 6, to the extent the law allows.</li>
+    <li>If a report is late, missed or incomplete, your remedy is the refund described in section 6 and your right to cancel under section 8, to the extent the law allows. This does not limit what section 15 says about a long interruption.</li>
     <li>Our total liability to you for everything else, in any 12-month period, is limited to the fees you paid us in the 12 months before the event that caused the claim.</li>
-    <li>Nothing in these terms limits or excludes liability for death or personal injury caused by negligence, for fraud or fraudulent misrepresentation, or for anything else that cannot be limited or excluded by law.</li>
+    <li>Nothing in these terms limits or excludes liability for death or personal injury caused by negligence, for fraud or fraudulent misrepresentation, for our deliberate breach of these terms, or for anything else that cannot be limited or excluded by law.</li>
   </ul>
 
   <h2>15. Events outside our control</h2>
@@ -71,11 +71,14 @@
 
   <h2>17. Changes to these terms</h2>
   <p>We may change these terms or the service. We will tell you by email before a change that affects you takes effect. Price increases need at least 30 days' notice, as set out in section 7.</p>
+  <p>If a change materially disadvantages you, for example by reducing what the service does or by raising the price, we will give you at least 30 days' notice by email. You may cancel before the change takes effect. If you cancel because of the change, we will refund the part of your last payment that covers the time after the change takes effect, worked out by the day.</p>
+  <p>A change that is minor, or that is needed to keep the service secure or lawful, may take effect sooner. We will tell you as soon as we can.</p>
 
   <h2>18. Questions and complaints</h2>
   <p>If you have a problem or a complaint, {% if site.contact %}email <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% else %}contact us{% endif %}. We will look into it and reply as soon as we reasonably can.</p>
 
   <h2>19. General</h2>
+  <p>You can print or save a copy of these terms from this page, or <a href="/terms.txt">download a copy</a>. Keep the copy that applied when you signed up.</p>
   <p>These terms are the whole agreement between you and us about the service. Only you and we can enforce them. If any part is found to be unenforceable, the rest still applies. The law of England and Wales applies, and the courts of England and Wales have jurisdiction.</p>
   <p>We will send notices to the email address you gave us{% if site.contact %}, and you may send notices to <a href="mailto:{{ site.contact }}">{{ site.contact }}</a>{% endif %}. We may transfer our rights and obligations under these terms to another business, and will tell you if we do. You may not transfer yours without our written consent.</p>
 </div></main>

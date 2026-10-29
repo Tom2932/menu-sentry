@@ -135,8 +135,24 @@ def _flatten(prefix, value, out):
         out[prefix] = str(value)
 
 
+def renewal_message(terms_url=None, price_text=None):
+    """Text shown next to the Pay button, so the price, renewal and cancelling are clear before payment."""
+    first = f"{price_text}. Renews automatically each month until you cancel." if price_text else \
+        "Renews automatically each month until you cancel."
+    text = (f"{first} Includes a weekly email report on the competitors you choose: price changes, new dishes, "
+            "removed dishes and renamed dishes. Cancel any time by replying to a report email. Cancelling stops the "
+            "next renewal, and you keep the service until the end of your current paid billing period.")
+    return text + (f" Terms: {terms_url}" if terms_url else "")
+
+
+def terms_label(terms_url):
+    """Wording for the terms tick box. Stripe shows the link as a link."""
+    return f"I confirm I am buying for my business, and I agree to the [terms of service]({terms_url})."
+
+
 def checkout_params(price_id, success_url, cancel_url, customer_email=None,
-                    client_reference_id=None, ui_mode="hosted_page", skip=()):
+                    client_reference_id=None, ui_mode="hosted_page", skip=(),
+                    submit_message=None, terms_message=None):
     fixed = dict(CHECKOUT_FIXED)
     if CHECKOUT_MODE != "subscription":
         fixed.pop("payment_method_collection", None)   # Stripe allows it in subscription mode only
@@ -154,16 +170,24 @@ def checkout_params(price_id, success_url, cancel_url, customer_email=None,
         params["customer_email"] = customer_email
     if client_reference_id:
         params["client_reference_id"] = client_reference_id
+    custom = {}
+    if submit_message:
+        custom["submit"] = {"message": submit_message}
+    if terms_message:
+        custom["terms_of_service_acceptance"] = {"message": terms_message}
+    if custom:
+        params["custom_text"] = custom
     flat = {}
     for k, v in params.items():
         _flatten(k, v, flat)
-    for k in skip:
-        flat.pop(k, None)
+    for k in skip:   # drop a setting, including everything nested under it
+        for key in [x for x in flat if x == k or x.startswith(k + "[")]:
+            del flat[key]
     return flat
 
 
 def create_checkout_session(key, price_id, success_url, cancel_url, customer_email=None,
-                            client_reference_id=None):
+                            client_reference_id=None, submit_message=None, terms_message=None):
     """Create a hosted Checkout Session and return Stripe's response (it includes 'url')."""
     # No API version is sent, so Stripe uses the account's default. Newer accounts call the hosted
     # page "hosted_page" and older ones "hosted", so try the new name first and fall back once.
@@ -173,7 +197,7 @@ def create_checkout_session(key, price_id, success_url, cancel_url, customer_ema
             r = requests.post(
                 f"{API}/checkout/sessions",
                 data=checkout_params(price_id, success_url, cancel_url, customer_email,
-                                     client_reference_id, ui_mode, skip),
+                                     client_reference_id, ui_mode, skip, submit_message, terms_message),
                 auth=(key, ""), timeout=30)
             if r.status_code < 400:
                 return r.json()
@@ -189,6 +213,9 @@ def create_checkout_session(key, price_id, success_url, cancel_url, customer_ema
             param = err.get("param")
             if err.get("code") == "parameter_unknown" and param in OPTIONAL_PARAMS and param not in skip:
                 skip.add(param)          # this account does not know that setting: drop it and retry
+                continue
+            if (param or "").startswith("custom_text") and "custom_text" not in skip:
+                skip.add("custom_text")  # the extra payment-page text is a bonus, never a reason to block a sale
                 continue
             if param == "ui_mode" and ui_mode == "hosted_page":
                 break                    # try the older name

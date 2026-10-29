@@ -4,6 +4,7 @@
 {% block body %}
 <main class="section"><div class="wrap narrow"><div class="card">
   <h1>{{ title }}</h1><p>{{ text }}</p>
+  {% if detail %}<p class="fine"><b>Details (shown only on your own computer):</b> {{ detail }}</p>{% endif %}
   <p><a class="btn ghost" href="/">Back to the home page</a></p>
 </div></div></main>
 {% endblock %}
